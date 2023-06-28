@@ -3,6 +3,7 @@
 ###
 
 (use ./config)
+(use ./shutil)
 (import ./commands)
 (import ./default-config)
 
@@ -78,13 +79,22 @@
 
   cmdbuf)
 
+(defn- get-com [name]
+  (def com (get commands/subcommands name))
+  (if (or (nil? com) (not (dyn :silent)))
+    com
+    (fn silent-com [args]
+      (with [dn (devnull)]
+        (with-dyns [:out dn]
+          (com args))))))
+
 (defn run
   "Run CLI commands."
   [& args]
   (def cmdbuf (setup args))
   (if (empty? cmdbuf)
     (commands/help)
-    (if-let [com (get commands/subcommands (first cmdbuf))]
+    (if-let [com (get-com (first cmdbuf))]
         (com ;(slice cmdbuf 1))
         (do
           (print "invalid command " (first cmdbuf))
