@@ -97,8 +97,9 @@
     (if-let [com (get-com (first cmdbuf))]
         (com ;(slice cmdbuf 1))
         (do
-          (print "invalid command " (first cmdbuf))
-          (commands/help)))))
+          (eprint "invalid command " (first cmdbuf))
+          (commands/help)
+          (os/exit 1)))))
 
 (defmacro jpm
   "A Macro User Interface for jpm to be used from a repl in a way similar to the command line."

@@ -304,7 +304,7 @@
   (if (zero? errors-found)
     (print "All tests passed.")
     (do
-      (printf "Failing test scripts: %d" errors-found)
+      (eprintf "Failing test scripts: %d" errors-found)
       (os/exit 1)))
   (flush))
 
@@ -326,7 +326,7 @@
 
   (unless (check-release)
     (task "install" []
-      (print "The install target is only enabled for release builds.")
+      (eprint "The install target is only enabled for release builds.")
       (os/exit 1)))
 
   (when (check-release)
